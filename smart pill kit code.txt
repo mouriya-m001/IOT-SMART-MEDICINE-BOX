@@ -1,0 +1,58 @@
+// Smart Medicine Box using ESP32
+// Simple Reminder System
+
+#include <Arduino.h>
+
+#define BUZZER 18
+#define LED 2
+
+// Set reminder times (24-hour format)
+int reminderHour1 = 9;   // 9 AM
+int reminderMin1  = 0;
+
+int reminderHour2 = 21;  // 9 PM
+int reminderMin2  = 0;
+
+void setup() {
+  pinMode(BUZZER, OUTPUT);
+  pinMode(LED, OUTPUT);
+
+  Serial.begin(115200);
+  Serial.println("Smart Medicine Box Started");
+}
+
+void loop() {
+  // Simulated time (for demo without RTC)
+  static int hour = 8;
+  static int minute = 59;
+
+  delay(1000);   // 1 second delay
+  minute++;
+
+  if (minute >= 60) {
+    minute = 0;
+    hour++;
+  }
+
+  if (hour >= 24) {
+    hour = 0;
+  }
+
+  Serial.print("Time: ");
+  Serial.print(hour);
+  Serial.print(":");
+  Serial.println(minute);
+
+  // Check reminder time
+  if ((hour == reminderHour1 && minute == reminderMin1) ||
+      (hour == reminderHour2 && minute == reminderMin2)) {
+
+    digitalWrite(BUZZER, HIGH);
+    digitalWrite(LED, HIGH);
+    Serial.println("Medicine Time!");
+    delay(5000);   // Alarm ON for 5 seconds
+  } else {
+    digitalWrite(BUZZER, LOW);
+    digitalWrite(LED, LOW);
+  }
+}
